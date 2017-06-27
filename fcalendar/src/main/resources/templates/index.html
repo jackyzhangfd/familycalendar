@@ -20,7 +20,45 @@
 					left: 'prev,next today',
 					center: 'title',
 					right: 'month,agendaWeek,agendaDay,listWeek'
-				}
+				},
+				
+				events: function(start, end, timezone, callback) {
+			        $.ajax({
+			            url: '/events',
+			            dataType: 'json',
+			            data: {
+			                // our hypothetical feed requires UNIX timestamps
+			                start: start.unix(),
+			                end: end.unix()
+			            },
+			            success: function(doc) {
+			                var events = [];
+			                $(doc._embedded.events).each(function() {
+			                    events.push({
+			                        title: $(this).attr('name'),
+			                        start: $(this).attr('startTime'),
+									end: $(this).attr('endTime'),
+									
+									eventDetail: $(this).attr('detail')
+			                    });
+			                });
+			                callback(events);
+			            }
+			        });
+			    },
+			    
+			    lazyFetching: true,
+			    
+			    eventClick: function(calEvent, jsEvent, view) {
+
+			        alert('Event: ' + calEvent.title);
+			        alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+			        alert('View: ' + view.name);
+
+			        // change the border color just for fun
+			        $(this).css('border-color', 'red');
+
+			    }
 		    })
 		});
 	</script>
