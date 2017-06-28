@@ -38,17 +38,25 @@ jQuery(document).ready(function($){
 	        	$.ajax({
 		            url: '/lunarinfo',
 		            dataType: 'json',
+		            type: "POST",
+		            contentType: "application/json",
 		            data: {
-		                date: "'"+date+"'"
+		                'targetDate': "'" + date.calendar() + "'"
 		            },
 		            success: function(lunarInfo) {
 		                alert(lunarInfo);
+		            },
+		            error: function(data){
+		            	alert(data);
+		            },
+		            fail: function(data){
+		            	alert(data);
 		            }
 		        });
 	        	
 	        	date = date.valueOf();
 	        	date = date + 24 * 60 * 60 * 1000;
-	        	date = new Date(date);
+	        	date = new moment(date);
 	        }
 	    },
 	    
