@@ -33,30 +33,30 @@ jQuery(document).ready(function($){
 	            }
 	        });
 	        
-	        var date = start;
-	        while(date <= end){
+	        var date = start.toDate();
+	        while(date.getTime() <= end.toDate().getTime()){
 	        	$.ajax({
 		            url: '/lunarinfo',
 		            dataType: 'json',
 		            type: "POST",
 		            contentType: "application/json",
-		            data: {
-		                'targetDate': "'" + date.calendar() + "'"
-		            },
+		            data: JSON.stringify({
+		                'targetDate': date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()
+		            }),
 		            success: function(lunarInfo) {
-		                alert(lunarInfo);
+		                
 		            },
 		            error: function(data){
-		            	alert(data);
+		            	alert("error when call /lunarinfo");
 		            },
 		            fail: function(data){
-		            	alert(data);
+		            	alert("fail when call /lunarinfo");
 		            }
 		        });
 	        	
-	        	date = date.valueOf();
-	        	date = date + 24 * 60 * 60 * 1000;
-	        	date = new moment(date);
+	        	var d = date.getTime();
+	        	d = d + 24 * 60 * 60 * 1000;
+	        	date.setTime(d);
 	        }
 	    },
 	    
