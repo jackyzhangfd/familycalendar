@@ -72,6 +72,10 @@ jQuery(document).ready(function($){
 	        // change the border color just for fun
 	        $(this).css('border-color', 'red');
 
+	    },
+	    
+	    dayRender: function( date, cell ) { 
+	    	cell = "<td>"+(date.day()+1)+"测试</td>";
 	    }
     })
 })
