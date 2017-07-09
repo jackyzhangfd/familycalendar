@@ -3,7 +3,9 @@ package com.autobusi.fcalendar.util;
 import java.text.ParseException;  
 import java.text.SimpleDateFormat;  
 import java.util.Calendar;  
-import java.util.Date;  
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;  
   
 /** 
  * 农历(阴历)工具类 
@@ -17,6 +19,8 @@ public class LunarCalendar {
     private int day;// 农历日  
     private boolean leap;// 农历闰年  
     // 上面4个值在构造方法中根据传入日期计算所得  
+    
+    private Map<String, String> festival = new HashMap<String, String>();//e.g. [12|30, 除夕]
   
     /** 
      * 中文月名称 
@@ -196,6 +200,19 @@ public class LunarCalendar {
         }  
         month = iMonth;  
         day = offset + 1;  
+        
+        //Chinese Festival
+        this.festival.put("1|1", "春节");
+        this.festival.put("1|15", "元宵节");
+        this.festival.put("1|8", "腊八节");
+        this.festival.put("12|30", "除夕");
+        this.festival.put("5|5", "端午节");
+        this.festival.put("7|7", "七夕节");
+        this.festival.put("7|15", "中原节");
+        this.festival.put("8|15", "元宵节");
+        this.festival.put("9|9", "重阳节");
+        this.festival.put("10|15", "下原节");
+        this.festival.put("xx|xx", "清明节");
     }  
   
     /** 
@@ -221,9 +238,36 @@ public class LunarCalendar {
         else  
             return chineseTen[day / 10] + chineseNumber[n];  
     }  
+    
+    public String getChinaDayString() {  
+        String chineseTen[] = { "初", "十", "廿", "卅" };  
+        int n = day % 10 == 0 ? 9 : day % 10 - 1;  
+        if (day > 30)  
+            return "";  
+        if (day == 10)  
+            return "初十";  
+        else  
+            return chineseTen[day / 10] + chineseNumber[n];  
+    }  
   
     public String toString() {  
         return year + "年" + (leap ? "闰" : "") + chineseNumber[month - 1] + "月" + getChinaDayString(day);  
     }  
-  
+    
+    /*
+     * 当前日期是农历节日吗？
+     */
+    public boolean isFestival(){
+    	String fKey = "";
+    	fKey = this.month + "|" + this.day;
+    	return this.festival.containsKey(fKey);
+    }
+    
+    /*
+     * 当前日期农历节日名
+     */
+    public String festival(){
+    	String fKey = this.month + "|" + this.day;
+    	return this.festival.get(fKey);
+    }
 }

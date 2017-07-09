@@ -36,7 +36,10 @@ public class CalendarRESTController {
 		LunarCalendar lc = new LunarCalendar(targetDate);
 		
 		Map lunarInfo = new HashMap<String, Object>();
-		lunarInfo.put("isFestival", true);
+		lunarInfo.put("isFestival", lc.isFestival());
+		if(lc.isFestival()){
+			lunarInfo.put("festival", lc.festival());
+		}
 		lunarInfo.put("ChineseDateString", lc.toString());
 		return lunarInfo;
 	}
