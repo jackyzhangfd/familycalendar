@@ -19,7 +19,7 @@ public class CalendarRESTController {
 	
 	@RequestMapping(value="/lunarinfo")
 	public Map lunnarInfoOfDate(@RequestBody Object data){
-		System.out.println(data);
+		//System.out.println(data);
 		
 		Map targetDateMap = (Map)data;
 		Date targetDate = null;
@@ -40,7 +40,7 @@ public class CalendarRESTController {
 		if(lc.isFestival()){
 			lunarInfo.put("festival", lc.festival());
 		}
-		lunarInfo.put("ChineseDateString", lc.toString());
+		lunarInfo.put("ChineseDateString", lc.getChinaMonthDayString());
 		return lunarInfo;
 	}
 }

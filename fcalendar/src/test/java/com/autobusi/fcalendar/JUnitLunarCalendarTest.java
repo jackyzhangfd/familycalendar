@@ -19,7 +19,7 @@ public class JUnitLunarCalendarTest {
 			cal.set(Calendar.MONTH, Calendar.JANUARY);
 			cal.set(Calendar.DATE, i);
 			LunarCalendar lc = new LunarCalendar(cal);
-			System.out.println(lc.getChinaDayString());
+			System.out.println(lc.getChinaMonthDayString());
 			System.out.println(lc.animalsYear());
 			System.out.println(lc.cyclical());
 			System.out.println(lc.toString());

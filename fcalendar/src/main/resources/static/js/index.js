@@ -9,6 +9,8 @@ jQuery(document).ready(function($){
 			right: 'month,agendaWeek,agendaDay,listWeek'
 		},
 		
+		locale: 'zh-cn',
+		
 		events: function(start, end, timezone, callback) {
 	        $.ajax({
 	            url: '/events',
@@ -75,7 +77,26 @@ jQuery(document).ready(function($){
 	    },
 	    
 	    dayRender: function( date, cell ) { 
-	    	cell = "<td>"+(date.day()+1)+"测试</td>";
+		
+        	$.ajax({
+	            url: '/lunarinfo',
+	            dataType: 'json',
+	            type: "POST",
+	            contentType: "application/json",
+	            data: JSON.stringify({
+	                'targetDate': date.year()+'-'+(date.month()+1)+'-'+date.date()
+	            }),
+	            success: function(lunarInfo) {
+	            	$(cell).text(lunarInfo.ChineseDateString);
+	            },
+	            error: function(data){
+	            	alert("error when call /lunarinfo");
+	            },
+	            fail: function(data){
+	            	alert("fail when call /lunarinfo");
+	            }
+	        });
+	        	
 	    }
     })
 })

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;  
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;  
   
 /** 
@@ -26,10 +27,7 @@ public class LunarCalendar {
      * 中文月名称 
      */  
     final static String chineseNumber[] = { "一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二" };  
-    /** 
-     * 中文日期格式 
-     */  
-    static SimpleDateFormat chineseDateFormat = new SimpleDateFormat("yyyy年MM月dd日");  
+     
     /** 
      * 农历数据， 1901 ~ 2100 年之间正确 
      */  
@@ -70,6 +68,9 @@ public class LunarCalendar {
   
     // ====== 传回农历 y年闰哪个月 1-12 , 没闰传回 0  
     final private static int leapMonth(int y) {  
+    	if(y-1900 >= 150){
+    		System.out.println("Year greater than 2050, can't handle it");
+    	}
         return (int) (lunarInfo[y - 1900] & 0xf);  
     }  
   
@@ -132,9 +133,11 @@ public class LunarCalendar {
         int yearCyl, monCyl, dayCyl;  
         int leapMonth = 0;  
         Date baseDate = null;  
-        try {  
-            baseDate = chineseDateFormat.parse("1900年1月31日");  
+        try { 
+            SimpleDateFormat chineseDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.US); 
+            baseDate = chineseDateFormat.parse("1900-01-31");  
         } catch (ParseException e) {  
+        	e.printStackTrace();
         }  
   
         // 求出和1900年1月31日相差的天数  
@@ -249,7 +252,11 @@ public class LunarCalendar {
         else  
             return chineseTen[day / 10] + chineseNumber[n];  
     }  
-  
+    
+    public String getChinaMonthDayString() {  
+        return (leap ? "闰" : "") + chineseNumber[month - 1] + "月" + this.getChinaDayString();  
+    }  
+    
     public String toString() {  
         return year + "年" + (leap ? "闰" : "") + chineseNumber[month - 1] + "月" + getChinaDayString(day);  
     }  
